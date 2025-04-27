@@ -19,3 +19,5 @@ gemini._baseUrl = "http....";
 gemini.ClearConversationHistory();
 
 //支持所有符合.Net Standard 2.0的项目
+
+本来打算支持主流大模型的,但是发现OpenAI在C#有自己的SDK,DeepSeek可以直接用OpenAI的,所以下一个支持的模型商是Claude
