@@ -41,7 +41,9 @@ public class GeminiApiClient : IDisposable
     /// <param name="modelName">The name of the model to use (e.g., "gemini-2.5-pro-exp-03-25"). / 要使用的模型名称（例如 "gemini-2.5-pro-exp-03-25"）。</param>
     public GeminiApiClient(string apiKey, string modelName = "gemini-2.5-pro-exp-03-25")
         : this(apiKey, modelName, new HttpClient(), false) // Creates HttpClient, so we own its disposal
-    { }
+    {
+
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GeminiApiClient"/> class using a provided HttpClient instance.
