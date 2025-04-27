@@ -1,3 +1,5 @@
+//其实也支持gemma
+
 //创建客户端
 
 var gemini = new GeminiApiClient(_apiKey);
