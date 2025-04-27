@@ -35,7 +35,9 @@ gemini.ClearConversationHistory();
 该库支持所有符合 .NET Standard 2.0 的项目。
 ### 未来计划
 目前支持基本功能，计划未来支持更多主流模型：
->OpenAI：建议直接使用官方 C# SDK。
->下一个计划支持的模型商：Claude。
+>
+>OpenAI：建议直接使用官方 C# SDK。\n
+下一个计划支持的模型商：Claude。
+>
 
 #### 欢迎对本项目提出建议和改进！
