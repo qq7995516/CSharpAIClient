@@ -178,12 +178,6 @@ foreach (var model in geminiModels)
 
 MIT许可证 - 详见LICENSE文件
 
-## 致谢
-
-感谢所有为此项目做出贡献的开发者。
-
-## 相关项目
-
 ---
 
 如需更多信息或报告问题，请访问我们的GitHub仓库。
