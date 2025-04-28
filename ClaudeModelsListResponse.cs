@@ -7,21 +7,21 @@ namespace CSharpAIClient
     /// 表示从 API 获取的模型列表的响应结构。
     /// Represents the response structure for the list models request from the API.
     /// </summary>
-    public class AnthropicModelsListResponse
+    public class ClaudeModelsListResponse
     {
         /// <summary>
         /// 可用模型的列表。
         /// A list of available models.
         /// </summary>
         [JsonPropertyName("models")]
-        public List<AnthropicModelInfo> Models { get; set; }
+        public List<ClaudeModelInfo> Models { get; set; }
     }
 
     /// <summary>
     /// 包含有关单个模型的详细信息。
     /// Contains detailed information about a single model.
     /// </summary>
-    public class AnthropicModelInfo
+    public class ClaudeModelInfo
     {
         /// <summary>
         /// 模型的唯一名称（例如 "claude-3-opus-20240229"）。

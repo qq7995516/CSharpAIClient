@@ -14,14 +14,14 @@ namespace CSharpAIClient
     /// 与 Anthropic Claude API 交互的客户端类，支持聊天补全和多轮对话。
     /// A client class to interact with the Anthropic Claude API for chat completions, supporting multi-turn conversations.
     /// </summary>
-    public class AnthropicApiClient : IDisposable
+    public class ClaudeApiClient : IDisposable
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         private readonly string _modelName;
         private readonly string _baseUrl = "https://api.anthropic.com/v1/";
         private string _apiVersion = "2023-06-01";
-        private List<AnthropicMessage> _conversationHistory;
+        private List<ClaudeMessage> _conversationHistory;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private bool _leaveHttpClientOpen;
         private string _systemMessage;
@@ -77,25 +77,25 @@ namespace CSharpAIClient
         }
 
         /// <summary>
-        /// 使用新的 HttpClient 实例初始化 <see cref="AnthropicApiClient"/> 类的新实例。
-        /// Initializes a new instance of the <see cref="AnthropicApiClient"/> class using a new HttpClient instance.
+        /// 使用新的 HttpClient 实例初始化 <see cref="ClaudeApiClient"/> 类的新实例。
+        /// Initializes a new instance of the <see cref="ClaudeApiClient"/> class using a new HttpClient instance.
         /// </summary>
         /// <param name="apiKey">您的 Anthropic API 密钥。/ Your Anthropic API Key.</param>
         /// <param name="modelName">要使用的模型名称（例如 "claude-3-opus-20240229"）。/ The name of the model to use (e.g., "claude-3-opus-20240229").</param>
-        public AnthropicApiClient(string apiKey, string modelName = "claude-3-opus-20240229")
+        public ClaudeApiClient(string apiKey, string modelName = "claude-3-opus-20240229")
             : this(apiKey, modelName, new HttpClient(), false)
         {
         }
 
         /// <summary>
-        /// 使用提供的 HttpClient 实例初始化 <see cref="AnthropicApiClient"/> 类的新实例。
-        /// Initializes a new instance of the <see cref="AnthropicApiClient"/> class using a provided HttpClient instance.
+        /// 使用提供的 HttpClient 实例初始化 <see cref="ClaudeApiClient"/> 类的新实例。
+        /// Initializes a new instance of the <see cref="ClaudeApiClient"/> class using a provided HttpClient instance.
         /// </summary>
         /// <param name="apiKey">您的 Anthropic API 密钥。/ Your Anthropic API Key.</param>
         /// <param name="modelName">要使用的模型名称（例如 "claude-3-opus-20240229"）。/ The name of the model to use (e.g., "claude-3-opus-20240229").</param>
         /// <param name="httpClient">用于请求的 HttpClient 实例。/ The HttpClient instance to use for requests.</param>
         /// <param name="leaveOpen">如果在 AnthropicApiClient 处置后保持 HttpClient 打开，则为 true；否则为 false。/ True to leave the HttpClient open after the AnthropicApiClient is disposed; false to dispose it.</param>
-        public AnthropicApiClient(string apiKey, string modelName, HttpClient httpClient, bool leaveOpen = true)
+        public ClaudeApiClient(string apiKey, string modelName, HttpClient httpClient, bool leaveOpen = true)
         {
             if (string.IsNullOrWhiteSpace(apiKey))
                 throw new ArgumentNullException(nameof(apiKey), "API 密钥不能为空。/ API key cannot be null or empty.");
@@ -108,7 +108,7 @@ namespace CSharpAIClient
             _modelName = modelName;
             _httpClient = httpClient;
             _leaveHttpClientOpen = leaveOpen;
-            _conversationHistory = new List<AnthropicMessage>();
+            _conversationHistory = new List<ClaudeMessage>();
             _systemMessage = string.Empty;
 
             _jsonSerializerOptions = new JsonSerializerOptions
@@ -129,7 +129,7 @@ namespace CSharpAIClient
         /// </summary>
         /// <param name="cancellationToken">用于取消异步操作的取消令牌。/ A cancellation token to cancel the asynchronous operation.</param>
         /// <returns>可用模型的列表。/ A list of available models.</returns>
-        public async Task<List<AnthropicModelInfo>> GetModelsListAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ClaudeModelInfo>> GetModelsListAsync(CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(_apiKey))
             {
@@ -152,17 +152,17 @@ namespace CSharpAIClient
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
 
-                AnthropicModelsListResponse modelsResponse;
+                ClaudeModelsListResponse modelsResponse;
                 try
                 {
-                    modelsResponse = JsonSerializer.Deserialize<AnthropicModelsListResponse>(jsonResponse, _jsonSerializerOptions);
+                    modelsResponse = JsonSerializer.Deserialize<ClaudeModelsListResponse>(jsonResponse, _jsonSerializerOptions);
                 }
                 catch (JsonException ex)
                 {
                     throw new JsonException($"反序列化模型列表响应时出错: {ex.Message}. 响应体: {jsonResponse}", ex);
                 }
 
-                return modelsResponse?.Models ?? new List<AnthropicModelInfo>();
+                return modelsResponse?.Models ?? new List<ClaudeModelInfo>();
             }
             finally
             {
@@ -195,26 +195,26 @@ namespace CSharpAIClient
             }
 
             // 添加用户消息到历史记录
-            var userContentPart = new AnthropicContentPart
+            var userContentPart = new ClaudeContentPart
             {
                 Type = "text",
                 Text = userMessage
             };
 
-            var userMessage_obj = new AnthropicMessage
+            var userMessage_obj = new ClaudeMessage
             {
                 Role = "user",
-                Content = new List<AnthropicContentPart> { userContentPart }
+                Content = new List<ClaudeContentPart> { userContentPart }
             };
 
             _conversationHistory.Add(userMessage_obj);
 
             // 准备请求负载
             var requestUrl = $"{_baseUrl}messages";
-            var requestBody = new AnthropicApiRequest
+            var requestBody = new ClaudeApiRequest
             {
                 Model = _modelName,
-                Messages = new List<AnthropicMessage>(_conversationHistory),
+                Messages = new List<ClaudeMessage>(_conversationHistory),
                 System = !string.IsNullOrEmpty(_systemMessage) ? _systemMessage : null,
                 MaxTokens = MaxTokens,
                 Temperature = Temperature,
@@ -254,10 +254,10 @@ namespace CSharpAIClient
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
 
-                AnthropicApiResponse apiResponse;
+                ClaudeApiResponse apiResponse;
                 try
                 {
-                    apiResponse = JsonSerializer.Deserialize<AnthropicApiResponse>(jsonResponse, _jsonSerializerOptions);
+                    apiResponse = JsonSerializer.Deserialize<ClaudeApiResponse>(jsonResponse, _jsonSerializerOptions);
                 }
                 catch (JsonException ex)
                 {
@@ -267,7 +267,7 @@ namespace CSharpAIClient
                 if (apiResponse?.Content != null && apiResponse.Content.Count > 0)
                 {
                     // 创建助手消息并添加到历史记录
-                    var assistantMessage = new AnthropicMessage
+                    var assistantMessage = new ClaudeMessage
                     {
                         Role = "assistant",
                         Content = apiResponse.Content
@@ -310,13 +310,13 @@ namespace CSharpAIClient
         /// Sets or replaces the current conversation history.
         /// </summary>
         /// <param name="history">要设置的对话历史记录。/ The conversation history to set.</param>
-        public void SetConversationHistory(IEnumerable<AnthropicMessage> history)
+        public void SetConversationHistory(IEnumerable<ClaudeMessage> history)
         {
             if (history == null)
             {
                 throw new ArgumentNullException(nameof(history), "提供的历史记录不能为 null。/ Provided history cannot be null.");
             }
-            _conversationHistory = new List<AnthropicMessage>(history);
+            _conversationHistory = new List<ClaudeMessage>(history);
         }
 
         /// <summary>
@@ -333,9 +333,9 @@ namespace CSharpAIClient
         /// Gets a read-only copy of the current conversation history.
         /// </summary>
         /// <returns>消息对象的只读列表。/ A read-only list of message objects.</returns>
-        public IReadOnlyList<AnthropicMessage> GetConversationHistory()
+        public IReadOnlyList<ClaudeMessage> GetConversationHistory()
         {
-            return new List<AnthropicMessage>(_conversationHistory).AsReadOnly();
+            return new List<ClaudeMessage>(_conversationHistory).AsReadOnly();
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace CSharpAIClient
             /// 发生错误时的 API 响应对象。
             /// The API response object when the error occurred.
             /// </summary>
-            public AnthropicApiResponse ApiResponse { get; }
+            public ClaudeApiResponse ApiResponse { get; }
 
             /// <summary>
             /// 初始化 <see cref="ApiException"/> 类的新实例。
@@ -379,7 +379,7 @@ namespace CSharpAIClient
             /// </summary>
             /// <param name="message">错误消息。/ The error message.</param>
             /// <param name="response">与错误关联的 API 响应对象。/ The API response object associated with the error.</param>
-            public ApiException(string message, AnthropicApiResponse response = null) : base(message)
+            public ApiException(string message, ClaudeApiResponse response = null) : base(message)
             {
                 ApiResponse = response;
             }
@@ -391,7 +391,7 @@ namespace CSharpAIClient
             /// <param name="message">错误消息。/ The error message.</param>
             /// <param name="innerException">内部异常。/ The inner exception.</param>
             /// <param name="response">与错误关联的 API 响应对象。/ The API response object associated with the error.</param>
-            public ApiException(string message, Exception innerException, AnthropicApiResponse response = null) : base(message, innerException)
+            public ApiException(string message, Exception innerException, ClaudeApiResponse response = null) : base(message, innerException)
             {
                 ApiResponse = response;
             }

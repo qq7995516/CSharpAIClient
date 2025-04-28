@@ -7,7 +7,7 @@ namespace CSharpAIClient
     /// 表示发送到 Anthropic API 的请求结构。
     /// Represents the request structure sent to the Anthropic API.
     /// </summary>
-    public class AnthropicApiRequest
+    public class ClaudeApiRequest
     {
         /// <summary>
         /// 要使用的模型 ID（例如 "claude-3-opus-20240229"）。
@@ -21,7 +21,7 @@ namespace CSharpAIClient
         /// The list of conversation messages in chronological order.
         /// </summary>
         [JsonPropertyName("messages")]
-        public List<AnthropicMessage> Messages { get; set; }
+        public List<ClaudeMessage> Messages { get; set; }
 
         /// <summary>
         /// 系统指令，用于指导模型的响应。

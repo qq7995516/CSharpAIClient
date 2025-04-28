@@ -7,7 +7,7 @@ namespace CSharpAIClient
     /// 表示消息的内容，包括文本内容或其他类型。
     /// Represents the content of a message, including text or other types.
     /// </summary>
-    public class AnthropicContentPart
+    public class ClaudeContentPart
     {
         /// <summary>
         /// 内容部分的类型（例如 "text"）。
@@ -28,7 +28,7 @@ namespace CSharpAIClient
     /// 表示对话中的一条消息。
     /// Represents a message in a conversation.
     /// </summary>
-    public class AnthropicMessage
+    public class ClaudeMessage
     {
         /// <summary>
         /// 消息的角色（例如 "user" 或 "assistant"）。
@@ -42,14 +42,14 @@ namespace CSharpAIClient
         /// The content parts of the message.
         /// </summary>
         [JsonPropertyName("content")]
-        public List<AnthropicContentPart> Content { get; set; }
+        public List<ClaudeContentPart> Content { get; set; }
     }
 
     /// <summary>
     /// 系统消息，用于指导模型的行为。
     /// A system message to guide the model's behavior.
     /// </summary>
-    public class AnthropicSystemMessage
+    public class ClaudeSystemMessage
     {
         /// <summary>
         /// 系统消息的内容（指导指令）。
