@@ -1,33 +1,52 @@
+我需要了解更多关于您的项目才能生成一份完整的README.md文件。让我先查看一些项目文件，以便更好地了解项目结构和功能。
+让我为您创建一份综合性的README.md文件，基于我对这个C# AI客户端库的了解。
+
 # CSharpAIClient
 
-## 项目介绍
+## 项目简介
 
-CSharpAIClient 是一个轻量级 C# 客户端库，用于与多种AI大语言模型API进行交互。目前支持Google Gemini和Anthropic Claude等主流大语言模型，提供简单易用的接口进行聊天对话、文本生成和模型查询等操作。
+CSharpAIClient是一个C#编写的跨平台AI客户端库，旨在简化与多种大型语言模型API的交互。该库支持多种主流AI服务，包括Claude、Gemini等，提供统一的接口进行AI对话和内容生成。
 
-该库设计用于.NET Standard 2.0环境，可以在多种.NET平台上使用，包括.NET Core、.NET Framework和Xamarin等。
+## 特性
 
-## 主要功能
+- **多模型支持**：
+  - Anthropic Claude（claude-3-opus、claude-3-sonnet等）
+  - Google Gemini（gemini-2.5-pro、gemini-1.5-flash等）
+  - 扩展设计支持更多模型（OpenAI、DeepSeek等）
 
-- **多模型支持**：支持Google Gemini和Anthropic Claude等多种LLM模型
-- **聊天对话**：支持多轮对话，轻松管理对话历史记录
-- **模型查询**：获取可用模型列表及其详细能力信息
-- **参数控制**：支持温度、TopP、TopK等参数的精细调节
-- **可扩展架构**：易于添加新的模型API支持
-- **双语注释**：提供中英文双语注释，方便多语言开发者使用
+- **统一API**：通过一致的接口与不同AI服务交互，简化代码
+
+- **对话管理**：
+  - 完整的对话历史管理
+  - 支持多轮对话
+  - 系统提示设置（System Prompt）
+
+- **高级配置选项**：
+  - 温度控制（Temperature）
+  - Top-K和Top-P参数设置
+  - 最大输出令牌控制
+
+- **.NET标准 2.0兼容**：可用于各种.NET项目，包括：
+  - .NET Core/.NET 5+
+  - .NET Framework 4.6.1+
+  - Xamarin应用
+  - Unity游戏开发
 
 ## 安装
 
-### 通过NuGet安装
 
-
-```
+```shell
+# 通过NuGet安装（命令行）
 dotnet add package CSharpAIClient
 
+# 或使用Package Manager Console
+Install-Package CSharpAIClient
+
 ```
 
-## 快速开始
+## 快速入门
 
-### Google Gemini API示例
+### Claude示例
 
 
 ```csharp
@@ -37,142 +56,139 @@ using System.Threading.Tasks;
 
 class Program
 {
-    static async Task Main(string[] args)
+    static async Task Main()
     {
-        // 初始化Gemini客户端
-        var geminiClient = new GeminiApiClient("YOUR_GEMINI_API_KEY", "gemini-2.5-pro-exp-03-25");
-        
-        // 发送聊天消息
-        string response = await geminiClient.SendChatMessageAsync("请介绍一下自己");
-        Console.WriteLine("Gemini: " + response);
-        
-        // 查询可用模型
-        var models = await geminiClient.GetModelsListAsync();
-        Console.WriteLine($"可用模型数量: {models.Count}");
-        
-        // 清除对话历史
-        geminiClient.ClearConversationHistory();
-    }
-}
-
-```
-
-### Anthropic Claude API示例
-
-
-```csharp
-using CSharpAIClient;
-using System;
-using System.Threading.Tasks;
-
-class Program
-{
-    static async Task Main(string[] args)
-    {
-        // 初始化Claude客户端
-        var claudeClient = new AnthropicApiClient("YOUR_ANTHROPIC_API_KEY", "claude-3-opus-20240229");
+        // 创建Claude客户端
+        var claudeClient = new ClaudeApiClient(
+            apiKey: "your-anthropic-api-key",
+            modelName: "claude-3-opus-20240229"
+        );
         
         // 设置系统消息
-        claudeClient.SetSystemMessage("你是一个专业的AI助手，专长于回答技术问题。");
+        claudeClient.SetSystemMessage("你是一位专业的助手。");
         
-        // 发送聊天消息
-        string response = await claudeClient.SendChatMessageAsync("请介绍一下量子计算");
-        Console.WriteLine("Claude: " + response);
+        // 发送消息并获取回复
+        string response = await claudeClient.SendChatMessageAsync("你能告诉我关于人工智能的最新进展吗？");
         
-        // 调整参数
-        claudeClient.Temperature = 0.5;
-        claudeClient.MaxTokens = 2000;
+        Console.WriteLine(response);
     }
 }
 
 ```
 
-## API文档
+### Gemini示例
 
-### GeminiApiClient
 
-Google Gemini大语言模型的API客户端类。
+```csharp
+using CSharpAIClient;
+using System;
+using System.Threading.Tasks;
 
-- **构造函数**
-  - `GeminiApiClient(string apiKey, string modelName = "gemini-2.5-pro-exp-03-25")`
-  - `GeminiApiClient(string apiKey, string modelName, HttpClient httpClient, bool leaveOpen = true)`
+class Program
+{
+    static async Task Main()
+    {
+        // 创建Gemini客户端
+        var geminiClient = new GeminiApiClient(
+            apiKey: "your-google-ai-api-key",
+            modelName: "gemini-2.5-pro-exp-03-25"
+        );
+        
+        // 配置生成参数
+        geminiClient.GenerationConfig.Temperature = 0.7;
+        geminiClient.GenerationConfig.MaxOutputTokens = 1024;
+        
+        // 发送消息并获取回复
+        string response = await geminiClient.SendChatMessageAsync("请介绍量子计算的基本概念");
+        
+        Console.WriteLine(response);
+    }
+}
 
-- **主要方法**
-  - `SendChatMessageAsync(string userMessage, CancellationToken cancellationToken = default)` - 发送用户消息并获取模型回复
-  - `GetModelsListAsync(CancellationToken cancellationToken = default)` - 获取可用模型列表
-  - `SetConversationHistory(IEnumerable<GeminiContent> history)` - 设置对话历史
-  - `ClearConversationHistory()` - 清除对话历史
-  - `GetConversationHistory()` - 获取当前对话历史的只读副本
-
-### AnthropicApiClient
-
-Anthropic Claude大语言模型的API客户端类。
-
-- **构造函数**
-  - `AnthropicApiClient(string apiKey, string modelName = "claude-3-opus-20240229")`
-  - `AnthropicApiClient(string apiKey, string modelName, HttpClient httpClient, bool leaveOpen = true)`
-
-- **主要方法**
-  - `SendChatMessageAsync(string userMessage, CancellationToken cancellationToken = default)` - 发送用户消息并获取模型回复
-  - `GetModelsListAsync(CancellationToken cancellationToken = default)` - 获取可用模型列表
-  - `SetSystemMessage(string systemMessage)` - 设置系统消息以指导模型行为
-  - `SetConversationHistory(IEnumerable<AnthropicMessage> history)` - 设置对话历史
-  - `ClearConversationHistory()` - 清除对话历史
-  - `GetConversationHistory()` - 获取当前对话历史的只读副本
+```
 
 ## 高级用法
 
-### 自定义HTTP客户端
+### 对话历史管理
 
 
 ```csharp
-// 使用自定义的HttpClient，例如配置代理或超时
-var httpClient = new HttpClient(new HttpClientHandler 
-{ 
-    Proxy = new WebProxy("http://your-proxy:port"),
-    UseProxy = true
-});
-httpClient.Timeout = TimeSpan.FromSeconds(30);
+// 获取对话历史
+var history = claudeClient.GetConversationHistory();
 
-// 将自定义的HttpClient传递给API客户端
-var geminiClient = new GeminiApiClient(apiKey, modelName, httpClient, true);
+// 清除对话历史
+claudeClient.ClearConversationHistory();
+
+// 导入对话历史（恢复上下文）
+claudeClient.SetConversationHistory(savedHistory);
 
 ```
 
-### 异常处理
+### 使用自定义HttpClient
 
 
 ```csharp
-try 
+// 使用自定义HttpClient（带代理配置）
+var handler = new HttpClientHandler
 {
-    var response = await geminiClient.SendChatMessageAsync("你好");
+    Proxy = new WebProxy("http://your-proxy-address:port"),
+    UseProxy = true
+};
+
+var httpClient = new HttpClient(handler);
+var claudeClient = new ClaudeApiClient(
+    apiKey: "your-api-key",
+    modelName: "claude-3-opus-20240229",
+    httpClient: httpClient,
+    leaveOpen: true // 允许外部管理HttpClient生命周期
+);
+
+```
+
+### 查询可用模型
+
+
+```csharp
+// 获取可用的Claude模型
+var claudeModels = await claudeClient.GetModelsListAsync();
+foreach (var model in claudeModels)
+{
+    Console.WriteLine($"模型名称: {model.Name}, 描述: {model.Description}");
 }
-catch (HttpRequestException ex) 
+
+// 获取可用的Gemini模型
+var geminiModels = await geminiClient.GetModelsListAsync();
+foreach (var model in geminiModels)
 {
-    Console.WriteLine($"网络请求错误: {ex.Message}");
-}
-catch (JsonException ex) 
-{
-    Console.WriteLine($"JSON解析错误: {ex.Message}");
-}
-catch (GeminiApiClient.ApiException ex) 
-{
-    Console.WriteLine($"API错误: {ex.Message}");
+    Console.WriteLine($"模型名称: {model.Name}, 版本: {model.Version}");
 }
 
 ```
 
 ## 系统要求
 
-- .NET Standard 2.0 或更高版本
-- 有效的Google Gemini API密钥或Anthropic Claude API密钥
+- .NET Standard 2.0或更高版本
+- 支持的运行时环境:
+  - .NET Core 2.0+
+  - .NET Framework 4.6.1+
+  - .NET 5.0+
+  - Xamarin.iOS 10.14+
+  - Xamarin.Android 8.0+
+  - Unity 2018.1+
 
 ## 许可证
 
-此项目遵循MIT许可证
+MIT许可证 - 详见LICENSE文件
 
-## 贡献指南
+## 致谢
 
-欢迎贡献代码、报告问题或提出功能请求。请通过GitHub Issues或Pull Requests参与项目开发。
+感谢所有为此项目做出贡献的开发者。
+
+## 相关项目
+
+- [OpenAI C# SDK](https://github.com/openai/openai-dotnet)
+- [Anthropic C# SDK](https://github.com/anthropics/anthropic-sdk-csharp)
 
 ---
+
+如需更多信息或报告问题，请访问我们的GitHub仓库。
