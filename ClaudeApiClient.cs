@@ -19,7 +19,7 @@ namespace CSharpAIClient
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         private readonly string _modelName;
-        private readonly string _baseUrl = "https://api.anthropic.com/v1/";
+        public  string _baseUrl = "https://api.anthropic.com/v1/";
         private string _apiVersion = "2023-06-01";
         private List<ClaudeMessage> _conversationHistory;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
