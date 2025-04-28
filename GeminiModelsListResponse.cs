@@ -3,8 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace CSharpAIClient
 {
-    // --- 在你的模型类文件或者 GeminiApiClient 文件顶部添加 using ---
-
     /// <summary>
     /// 表示从 API 获取的模型列表的响应结构。
     /// Represents the response structure for the list models request from the API.

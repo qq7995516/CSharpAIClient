@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 namespace CSharpAIClient
 {
-
     /// <summary>
     /// Details about the tokens used for a specific modality in the prompt.
     /// 有关提示中特定模态所用令牌的详细信息。

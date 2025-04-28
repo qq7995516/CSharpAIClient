@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace CSharpAIClient
 {
-
     /// <summary>
     /// Configuration settings for content generation.
     /// 内容生成的配置设置。
