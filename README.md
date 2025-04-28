@@ -184,9 +184,6 @@ MIT许可证 - 详见LICENSE文件
 
 ## 相关项目
 
-- [OpenAI C# SDK](https://github.com/openai/openai-dotnet)
-- [Anthropic C# SDK](https://github.com/anthropics/anthropic-sdk-csharp)
-
 ---
 
 如需更多信息或报告问题，请访问我们的GitHub仓库。
