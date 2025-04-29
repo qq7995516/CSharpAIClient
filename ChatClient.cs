@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LlmClientLibrary
 {
     /// <summary>
-    /// 该类主要用于私有部署的LM Studio客户端请求.
+    /// 该类主要用于私有部署的LM Studio客户端.
     /// This class is mainly used for LM Studio client requests for private deployment
     /// </summary>
     public class ChatClient
